@@ -33,7 +33,28 @@ jobs:
           mkdir -p custom-pyodide
           tar -xf pyodide.tar.bz2 -C custom-pyodide --strip-components=1
           cp dist-wheels/*.whl custom-pyodide/
-          pyodide lockfile add-wheels custom-pyodide/*.whl --input custom-pyodide/pyodide-lock.json --output custom-pyodide/pyodide-lock.json
+          python -c "
+          import json, hashlib, glob
+          from pathlib import Path
+          lock_path = Path('custom-pyodide/pyodide-lock.json')
+          lock = json.loads(lock_path.read_text())
+          for whl in glob.glob('custom-pyodide/*.whl'):
+              whl_path = Path(whl)
+              sha256 = hashlib.sha256(whl_path.read_bytes()).hexdigest()
+              # Metadata for bigquery-lite
+              name = 'bigquery-lite'
+              lock['packages'][name] = {
+                  'name': name,
+                  'version': '0.1.0',
+                  'file_name': whl_path.name,
+                  'install_dir': 'site',
+                  'package_type': 'package',
+                  'imports': ['bigquery_lite'],
+                  'depends': [],
+                  'sha256': sha256
+              }
+          lock_path.write_text(json.dumps(lock, indent=2))
+          "
       - name: Build the JupyterLite site
         run: |
           cp README.md content
