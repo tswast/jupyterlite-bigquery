@@ -20,11 +20,10 @@ jobs:
           python-version: '3.11'
       - name: Install the dependencies
         run: |
-          python -m pip install -r requirements.txt pyodide-build
+          python -m pip install -r requirements.txt pyodide-build wheel
       - name: Build the bigquery-lite wheel
         run: |
           mkdir -p dist-wheels
-          python -m pip install wheel
           cd packages/bigquery-lite
           python -m pip wheel . -w ../../dist-wheels
       - name: Download and prepare custom Pyodide
