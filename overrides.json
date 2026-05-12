@@ -1,0 +1,7 @@
+{
+  "@jupyterlite/pyodide-kernel-extension:kernel": {
+    "piplite": {
+      "install": ["bigquery-lite"]
+    }
+  }
+}
