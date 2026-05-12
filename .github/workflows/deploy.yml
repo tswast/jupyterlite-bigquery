@@ -23,14 +23,14 @@ jobs:
           python -m pip install -r requirements.txt
       - name: Build the bigquery-lite wheel
         run: |
-          mkdir -p pypi
+          mkdir -p dist-wheels
           python -m pip install wheel
           cd packages/bigquery-lite
-          python -m pip wheel . -w ../../pypi
+          python -m pip wheel . -w ../../dist-wheels
       - name: Build the JupyterLite site
         run: |
           cp README.md content
-          jupyter lite build --contents content --output-dir dist
+          jupyter lite build --contents content --output-dir dist --piplite-wheels dist-wheels/*.whl
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
