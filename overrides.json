@@ -2,6 +2,9 @@
   "@jupyterlite/pyodide-kernel-extension:kernel": {
     "piplite": {
       "install": ["bigquery-lite"]
+    },
+    "loadPyodideOptions": {
+      "packages": ["bigquery-lite"]
     }
   }
 }

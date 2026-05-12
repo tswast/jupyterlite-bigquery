@@ -20,17 +20,25 @@ jobs:
           python-version: '3.11'
       - name: Install the dependencies
         run: |
-          python -m pip install -r requirements.txt
+          python -m pip install -r requirements.txt pyodide-build
       - name: Build the bigquery-lite wheel
         run: |
           mkdir -p dist-wheels
           python -m pip install wheel
           cd packages/bigquery-lite
           python -m pip wheel . -w ../../dist-wheels
+      - name: Download and prepare custom Pyodide
+        run: |
+          # Use 0.26.4 as it is a known stable release with a reliable tarball URL
+          curl -L https://github.com/pyodide/pyodide/releases/download/0.26.4/pyodide-0.26.4.tar.bz2 -o pyodide.tar.bz2
+          mkdir -p custom-pyodide
+          tar -xf pyodide.tar.bz2 -C custom-pyodide --strip-components=1
+          cp dist-wheels/*.whl custom-pyodide/
+          pyodide lockfile add-wheels custom-pyodide/*.whl --input custom-pyodide/pyodide-lock.json --output custom-pyodide/pyodide-lock.json
       - name: Build the JupyterLite site
         run: |
           cp README.md content
-          jupyter lite build --contents content --output-dir dist --piplite-wheels dist-wheels/*.whl
+          jupyter lite build --contents content --output-dir dist --piplite-wheels dist-wheels/*.whl --pyodide custom-pyodide
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
