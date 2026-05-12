@@ -28,7 +28,7 @@ jobs:
           python -m pip wheel . -w ../../dist-wheels
       - name: Download and prepare custom Pyodide
         run: |
-          curl -L https://github.com/pyodide/pyodide/releases/download/0.26.4/pyodide-0.26.4.tar.bz2 -o pyodide.tar.bz2
+          curl -L https://github.com/pyodide/pyodide/releases/download/0.29.0/pyodide-0.29.0.tar.bz2 -o pyodide.tar.bz2
           mkdir -p pyodide-prep
           tar -xf pyodide.tar.bz2 -C pyodide-prep
           # The tarball has a top-level 'pyodide' directory.
