@@ -60,7 +60,7 @@ jobs:
           "
           cd ../..
           tar -cjf pyodide-custom.tar.bz2 -C pyodide-prep pyodide
-
+      - name: Build the JupyterLite site
         run: |
           cp README.md content
           jupyter lite build --contents content --output-dir dist --pyodide pyodide-custom.tar.bz2
