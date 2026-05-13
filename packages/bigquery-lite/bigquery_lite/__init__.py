@@ -23,7 +23,7 @@ async def auth():
             future.set_result(token)
 
     proxy = create_proxy(on_token)
-    js.window.onBigQueryToken = proxy
+    js.onBigQueryToken = proxy
 
     html = """
     <!DOCTYPE html>
@@ -55,7 +55,7 @@ async def auth():
     </html>
     """
 
-    w = js.window.open("", "bigquery_auth", "width=400,height=250")
+    w = js.open("", "bigquery_auth", "width=400,height=250")
     if not w:
         proxy.destroy()
         raise RuntimeError("Pop-up window blocked or failed to open. Please allow pop-ups for this site.")
@@ -68,5 +68,4 @@ async def auth():
     finally:
         proxy.destroy()
         js.eval("delete window.onBigQueryToken")
-
     return result
